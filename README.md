@@ -34,5 +34,29 @@ To run the development environment, ensure you have Docker and Docker Compose in
 docker-compose up -d
 ```
 
+## Troubleshooting
+
+### PostgreSQL Port Conflict
+
+If you encounter `FATAL: role "admin" does not exist` or `Connection refused` errors when starting a Spring Boot service, it's likely due to another PostgreSQL instance running on your machine and occupying port `5432`.
+
+To resolve this:
+
+1.  **Identify the conflicting process:**
+    ```bash
+    sudo lsof -i :5432
+    ```
+    Look for a `postgres` process that is *not* part of your Docker containers (e.g., not `com.docke`). Note its PID.
+
+2.  **Stop the conflicting service:**
+    If it's a Homebrew-installed PostgreSQL, stop it using `brew services` (e.g., `brew services stop postgresql@17`). If it's a different process, you might need to `kill -9 <PID>` it, but be aware it might restart if managed by a system service.
+
+3.  **Ensure Docker containers are clean and restarted:**
+    ```bash
+    docker-compose down
+    docker volume rm Showscape_postgres_data # Only if you want a fresh database
+    docker-compose up -d
+    ```
+
 ---
 *This README is a living document and will be updated as the project evolves.*
