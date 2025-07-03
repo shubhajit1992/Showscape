@@ -1,0 +1,24 @@
+# Environment variables
+.env
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+
+# Gradle
+.gradle/
+build/
+
+# Maven
+target/
+
+# Logs
+*.log
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Local Docker files
+docker-compose.override.yml
