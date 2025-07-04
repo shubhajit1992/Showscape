@@ -1,35 +1,62 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect, useState } from 'react'
 import './App.css'
+import { type Movie } from './Movie';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        // Adjust this URL if your movie-service is running on a different port or host
+        const response = await fetch('http://localhost:8080/api/movies');
+        if (!response.ok) {
+          // Attempt to read error message from backend
+          const errorData = await response.json();
+          throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+        }
+        const data: Movie[] = await response.json();
+        setMovies(data);
+      } catch (error: any) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMovies();
+  }, []);
+
+  if (loading) {
+    return <div>Loading movies...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="App">
+      <h1>Showscape Movies</h1>
+      {movies.length === 0 ? (
+        <p>No movies available. Add some from the backend!</p>
+      ) : (
+        <div className="movie-list">
+          {movies.map((movie) => (
+            <div key={movie.id} className="movie-card">
+              <h2>{movie.title}</h2>
+              <p><strong>Genre:</strong> {movie.genre}</p>
+              <p><strong>Release Date:</strong> {movie.releaseDate}</p>
+              <p><strong>Rating:</strong> {movie.rating}</p>
+              <p>{movie.description}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;
