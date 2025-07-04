@@ -1,0 +1,21 @@
+meta {
+  name: Create Movie
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "title": "Inception",
+    "description": "A dream within a dream.",
+    "releaseDate": "2010-07-16",
+    "genre": "Sci-Fi",
+    "rating": 8.8
+  }
+}

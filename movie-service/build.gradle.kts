@@ -36,6 +36,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     compileOnly("org.projectlombok:lombok")
     runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.projectlombok:lombok")
@@ -76,6 +77,7 @@ tasks.withType<Test>().configureEach {
                     println("❌ TEST FAILED: ${testDescriptor.className}.${testDescriptor.name}")
                 TestResult.ResultType.SKIPPED ->
                     println("⚠️ TEST SKIPPED: ${testDescriptor.className}.${testDescriptor.name}")
+                else -> println("❓ TEST UNKNOWN: ${testDescriptor.className}.${testDescriptor.name} - ${result.resultType}") // Handle other cases
             }
         }
     })
