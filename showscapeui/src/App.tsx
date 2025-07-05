@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import './App.css'
-import { type Movie } from './Movie';
+import type { Movie } from './Movie';
 import MovieForm from './components/MovieForm';
 
 function App() {
@@ -44,6 +44,25 @@ function App() {
     setEditingMovie(null); // Clear editing state without refreshing
   };
 
+  const handleDeleteClick = async (id: number) => {
+    if (window.confirm('Are you sure you want to delete this movie?')) {
+      try {
+        const response = await fetch(`http://localhost:8080/api/movies/${id}`, {
+          method: 'DELETE',
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+        }
+
+        fetchMovies(); // Refresh the movie list after deletion
+      } catch (err: any) {
+        setError(err.message);
+      }
+    }
+  };
+
   if (loading) {
     return <div>Loading movies...</div>;
   }
@@ -52,7 +71,7 @@ function App() {
     <div className="App">
       <h1>Showscape Movies</h1>
       <MovieForm
-        initialMovie={editingMovie}
+        initialMovie={editingMovie ?? undefined}
         onMovieAdded={fetchMovies}
         onMovieUpdated={handleMovieUpdated}
         onCancelEdit={handleCancelEdit}
@@ -71,6 +90,7 @@ function App() {
               <p>{movie.description}</p>
               <p><strong>Rating:</strong> {movie.rating}</p>
               <button onClick={() => handleEditClick(movie)} className="edit-button">Edit</button>
+              <button onClick={() => handleDeleteClick(movie.id)} className="delete-button">Delete</button>
             </div>
           ))}
         </div>
