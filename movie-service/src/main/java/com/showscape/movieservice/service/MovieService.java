@@ -119,6 +119,24 @@ public class MovieService {
                 .toList();
     }
 
+    /**
+     * Retrieves all distinct genres from the database.
+     *
+     * @return a list of distinct genres
+     */
+    public List<String> getDistinctGenres() {
+        return movieRepository.findDistinctGenres();
+    }
+
+    /**
+     * Retrieves all distinct release years from the database.
+     *
+     * @return a list of distinct release years
+     */
+    public List<Integer> getDistinctYears() {
+        return movieRepository.findDistinctReleaseYears();
+    }
+
     private MovieResponse mapToMovieResponse(Movie movie) {
         return MovieResponse.builder()
                 .id(movie.getId())

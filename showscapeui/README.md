@@ -16,7 +16,7 @@ This is the React frontend application for the Showscape project, providing a us
 *   **Add New Movie:** A form to create new movie entries, with client-side validation and backend error handling.
 *   **Edit Movie:** Functionality to edit existing movie details, pre-populating the form with current data.
 *   **Delete Movie:** Ability to delete movies with a confirmation step.
-*   **Search/Filter:** Filters movies by genre and release year using debounced inputs to optimize API calls.
+*   **Search/Filter:** Filters movies by genre and release year using dynamically populated dropdowns and debounced inputs to optimize API calls.
 *   **Client-Side Routing:** Uses React Router for navigation between different views (Home, Add Movie, Edit Movie).
 *   **Improved UI/UX:** Enhanced form layout, consistent container widths, and basic styling for a better user experience.
 

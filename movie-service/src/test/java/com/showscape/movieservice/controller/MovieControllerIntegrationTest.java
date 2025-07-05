@@ -205,4 +205,28 @@ class MovieControllerIntegrationTest {
         assertThat(response.getBody()).hasSize(1);
         assertThat(response.getBody()[0].title()).isEqualTo("Movie 2020");
     }
+
+    @Test
+    void getDistinctGenres_shouldReturnDistinctGenres() {
+        movieRepository.save(Movie.builder().title("Movie 1").genre("Action").releaseDate(LocalDate.of(2020,1,1)).rating(7.0).build());
+        movieRepository.save(Movie.builder().title("Movie 2").genre("Comedy").releaseDate(LocalDate.of(2021,1,1)).rating(8.0).build());
+
+        ResponseEntity<String[]> response = restTemplate.getForEntity(getBaseUrl() + "/genres", String[].class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody()).containsExactlyInAnyOrder("Action", "Comedy");
+    }
+
+    @Test
+    void getDistinctYears_shouldReturnDistinctYears() {
+        movieRepository.save(Movie.builder().title("Movie 1").genre("Action").releaseDate(LocalDate.of(2020,1,1)).rating(7.0).build());
+        movieRepository.save(Movie.builder().title("Movie 2").genre("Comedy").releaseDate(LocalDate.of(2021,1,1)).rating(8.0).build());
+
+        ResponseEntity<Integer[]> response = restTemplate.getForEntity(getBaseUrl() + "/years", Integer[].class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody()).containsExactlyInAnyOrder(2020, 2021);
+    }
 }

@@ -19,4 +19,10 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     // Custom query to find by release year
     @Query("SELECT m FROM Movie m WHERE YEAR(m.releaseDate) = :year")
     List<Movie> findByReleaseYear(@Param("year") int year);
+
+    @Query("SELECT DISTINCT m.genre FROM Movie m")
+    List<String> findDistinctGenres();
+
+    @Query("SELECT DISTINCT YEAR(m.releaseDate) FROM Movie m ORDER BY YEAR(m.releaseDate) ASC")
+    List<Integer> findDistinctReleaseYears();
 }

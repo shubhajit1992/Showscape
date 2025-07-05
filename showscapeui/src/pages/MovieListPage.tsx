@@ -12,6 +12,8 @@ const MovieListPage: React.FC<MovieListPageProps> = ({ onEditMovie }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [genreFilter, setGenreFilter] = useState<string>('');
   const [yearFilter, setYearFilter] = useState<string>('');
+  const [availableGenres, setAvailableGenres] = useState<string[]>([]);
+  const [availableYears, setAvailableYears] = useState<number[]>([]);
 
   // Debounced filter values
   const debouncedGenreFilter = useDebounce(genreFilter, 500); // 500ms debounce
@@ -44,9 +46,25 @@ const MovieListPage: React.FC<MovieListPageProps> = ({ onEditMovie }) => {
     }
   }, [debouncedGenreFilter, debouncedYearFilter]); // Depend on debounced filters
 
+  const fetchFilterOptions = useCallback(async () => {
+    try {
+      const genresResponse = await fetch('http://localhost:8080/api/movies/genres');
+      const genresData: string[] = await genresResponse.json();
+      setAvailableGenres(genresData);
+
+      const yearsResponse = await fetch('http://localhost:8080/api/movies/years');
+      const yearsData: number[] = await yearsResponse.json();
+      setAvailableYears(yearsData);
+    } catch (err: any) {
+      console.error('Failed to fetch filter options:', err);
+      // Optionally set an error state for filter options
+    }
+  }, []);
+
   useEffect(() => {
     fetchMovies();
-  }, [fetchMovies]);
+    fetchFilterOptions();
+  }, [fetchMovies, fetchFilterOptions]);
 
   const handleDeleteClick = async (id: number) => {
     if (window.confirm('Are you sure you want to delete this movie?')) {
@@ -82,18 +100,26 @@ const MovieListPage: React.FC<MovieListPageProps> = ({ onEditMovie }) => {
       {error && <p className="error-message">Error: {error}</p>}
 
       <div className="filter-container">
-        <input
-          type="text"
-          placeholder="Filter by Genre"
+        <select
           value={genreFilter}
           onChange={(e) => setGenreFilter(e.target.value)}
-        />
-        <input
-          type="number"
-          placeholder="Filter by Year"
+        >
+          <option value="">All Genres</option>
+          {availableGenres.map((genre) => (
+            <option key={genre} value={genre}>{genre}</option>
+          ))}
+        </select>
+
+        <select
           value={yearFilter}
           onChange={(e) => setYearFilter(e.target.value)}
-        />
+        >
+          <option value="">All Years</option>
+          {availableYears.map((year) => (
+            <option key={year} value={year}>{year}</option>
+          ))}
+        </select>
+
         <button onClick={handleClearFilters} className="clear-filter-button">Clear Filters</button>
       </div>
 

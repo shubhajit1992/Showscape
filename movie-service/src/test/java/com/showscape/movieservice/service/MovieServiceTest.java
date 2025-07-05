@@ -161,4 +161,26 @@ class MovieServiceTest {
         assertThat(responses.get(0).releaseDate().getYear()).isEqualTo(2010);
         verify(movieRepository).findByReleaseYear(2010);
     }
+
+    @Test
+    void getDistinctGenres_shouldReturnDistinctGenres() {
+        List<String> genres = Arrays.asList("Action", "Comedy", "Drama");
+        when(movieRepository.findDistinctGenres()).thenReturn(genres);
+
+        List<String> result = movieService.getDistinctGenres();
+
+        assertThat(result).isEqualTo(genres);
+        verify(movieRepository).findDistinctGenres();
+    }
+
+    @Test
+    void getDistinctYears_shouldReturnDistinctYears() {
+        List<Integer> years = Arrays.asList(2020, 2021, 2022);
+        when(movieRepository.findDistinctReleaseYears()).thenReturn(years);
+
+        List<Integer> result = movieService.getDistinctYears();
+
+        assertThat(result).isEqualTo(years);
+        verify(movieRepository).findDistinctReleaseYears();
+    }
 }

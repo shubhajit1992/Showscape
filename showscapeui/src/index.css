@@ -187,7 +187,8 @@ button[type="submit"]:active,
   flex-wrap: wrap;
 }
 
-.filter-container input {
+.filter-container input,
+.filter-container select { /* Added select to filter container input styles */
   padding: 10px; /* Increased padding */
   border: 1px solid #555;
   border-radius: 6px;

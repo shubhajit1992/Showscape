@@ -59,4 +59,16 @@ public class MovieController {
         List<MovieResponse> movies = movieService.getMoviesByReleaseYear(year);
         return ResponseEntity.ok(movies);
     }
+
+    @GetMapping("/genres")
+    public ResponseEntity<List<String>> getDistinctGenres() {
+        List<String> genres = movieService.getDistinctGenres();
+        return ResponseEntity.ok(genres);
+    }
+
+    @GetMapping("/years")
+    public ResponseEntity<List<Integer>> getDistinctYears() {
+        List<Integer> years = movieService.getDistinctYears();
+        return ResponseEntity.ok(years);
+    }
 }

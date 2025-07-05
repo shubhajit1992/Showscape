@@ -51,6 +51,8 @@ To run the Movie Service locally, ensure you have Docker and Docker Compose inst
 *   `DELETE /api/movies/{id}`
 *   `GET /api/movies/genre/{genre}`
 *   `GET /api/movies/year/{year}`
+*   `GET /api/movies/genres` (Returns a list of all distinct genres)
+*   `GET /api/movies/years` (Returns a list of all distinct release years)
 
 ## Testing
 
