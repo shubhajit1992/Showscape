@@ -12,13 +12,6 @@ function App() {
   const [error, setError] = useState<string | null>(null);
   const [editingMovie, setEditingMovie] = useState<Movie | null>(null); // State for editing movie
 
-  // This fetchMovies will be passed down to MovieListPage to trigger data refresh
-  const fetchMovies = useCallback(async (genreFilter?: string, yearFilter?: string) => {
-    // This logic will be moved to MovieListPage
-    // For now, it's a placeholder to satisfy dependencies
-    console.log('Fetching movies with filters:', genreFilter, yearFilter);
-  }, []);
-
   const handleEditMovie = (movie: Movie) => {
     setEditingMovie(movie);
     navigate(`/edit-movie/${movie.id}`);
