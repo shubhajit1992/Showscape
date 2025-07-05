@@ -1,7 +1,5 @@
 package com.showscape.movieservice.service;
 
-import static java.util.stream.Collectors.toList;
-
 import com.showscape.movieservice.dto.MovieRequest;
 import com.showscape.movieservice.dto.MovieResponse;
 import com.showscape.movieservice.entity.Movie;
@@ -106,7 +104,7 @@ public class MovieService {
     public List<MovieResponse> getMoviesByGenre(String genre) {
         return movieRepository.findByGenre(genre).stream()
                 .map(this::mapToMovieResponse)
-                .collect(toList());
+                .toList();
     }
 
     /**
@@ -118,7 +116,7 @@ public class MovieService {
     public List<MovieResponse> getMoviesByReleaseYear(int year) {
         return movieRepository.findByReleaseYear(year).stream()
                 .map(this::mapToMovieResponse)
-                .collect(toList());
+                .toList();
     }
 
     private MovieResponse mapToMovieResponse(Movie movie) {

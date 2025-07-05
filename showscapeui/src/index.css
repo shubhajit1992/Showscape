@@ -175,3 +175,45 @@ button[type="submit"]:hover {
 .delete-button:hover {
   background-color: #c82333;
 }
+
+.filter-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filter-container input {
+  padding: 8px;
+  border: 1px solid #555;
+  border-radius: 4px;
+  background-color: #444;
+  color: #eee;
+  font-size: 0.9em;
+  width: 150px;
+}
+
+.filter-button, .clear-filter-button {
+  background-color: #28a745;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.2s;
+}
+
+.filter-button:hover, .clear-filter-button:hover {
+  background-color: #218838;
+}
+
+.clear-filter-button {
+  background-color: #ffc107;
+  color: #333;
+}
+
+.clear-filter-button:hover {
+  background-color: #e0a800;
+}
