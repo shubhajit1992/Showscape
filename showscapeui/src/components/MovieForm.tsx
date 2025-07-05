@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { type MovieRequest } from '../dto/MovieRequest';
+import { type Movie } from '../Movie';
 
 interface MovieFormProps {
-  onMovieAdded: () => void;
+  initialMovie?: Movie; // Optional prop for editing
+  onMovieAdded: () => void; // Callback for adding a new movie
+  onMovieUpdated?: () => void; // Callback for updating an existing movie
+  onCancelEdit?: () => void; // Callback to cancel editing
 }
 
-const MovieForm: React.FC<MovieFormProps> = ({ onMovieAdded }) => {
+const MovieForm: React.FC<MovieFormProps> = ({ initialMovie, onMovieAdded, onMovieUpdated, onCancelEdit }) => {
   const [formData, setFormData] = useState<MovieRequest>({
     title: '',
     description: '',
@@ -15,6 +19,26 @@ const MovieForm: React.FC<MovieFormProps> = ({ onMovieAdded }) => {
   });
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (initialMovie) {
+      setFormData({
+        title: initialMovie.title,
+        description: initialMovie.description,
+        releaseDate: initialMovie.releaseDate, // Assuming YYYY-MM-DD string
+        genre: initialMovie.genre,
+        rating: initialMovie.rating,
+      });
+    } else {
+      setFormData({
+        title: '',
+        description: '',
+        releaseDate: '',
+        genre: '',
+        rating: 0,
+      });
+    }
+  }, [initialMovie]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -29,9 +53,13 @@ const MovieForm: React.FC<MovieFormProps> = ({ onMovieAdded }) => {
     setError(null);
     setSuccessMessage(null);
 
+    const isEditing = initialMovie && initialMovie.id;
+    const url = isEditing ? `http://localhost:8080/api/movies/${initialMovie.id}` : 'http://localhost:8080/api/movies';
+    const method = isEditing ? 'PUT' : 'POST';
+
     try {
-      const response = await fetch('http://localhost:8080/api/movies', {
-        method: 'POST',
+      const response = await fetch(url, {
+        method: method,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -40,7 +68,6 @@ const MovieForm: React.FC<MovieFormProps> = ({ onMovieAdded }) => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        // Assuming ApiErrorResponse structure for validation errors
         if (response.status === 400 && errorData.details) {
           const validationErrors = errorData.details.map((detail: any) => `${detail.field}: ${detail.message}`).join('; ');
           throw new Error(`Validation failed: ${validationErrors}`);
@@ -49,15 +76,20 @@ const MovieForm: React.FC<MovieFormProps> = ({ onMovieAdded }) => {
         }
       }
 
-      setSuccessMessage('Movie added successfully!');
-      setFormData({
-        title: '',
-        description: '',
-        releaseDate: '',
-        genre: '',
-        rating: 0,
-      });
-      onMovieAdded(); // Notify parent to refresh movie list
+      if (isEditing) {
+        setSuccessMessage('Movie updated successfully!');
+        if (onMovieUpdated) onMovieUpdated();
+      } else {
+        setSuccessMessage('Movie added successfully!');
+        setFormData({
+          title: '',
+          description: '',
+          releaseDate: '',
+          genre: '',
+          rating: 0,
+        });
+        onMovieAdded();
+      }
     } catch (err: any) {
       setError(err.message);
     }
@@ -65,7 +97,7 @@ const MovieForm: React.FC<MovieFormProps> = ({ onMovieAdded }) => {
 
   return (
     <div className="movie-form-container">
-      <h2>Add New Movie</h2>
+      <h2>{initialMovie ? 'Edit Movie' : 'Add New Movie'}</h2>
       <form onSubmit={handleSubmit} className="movie-form">
         {error && <p className="error-message">Error: {error}</p>}
         {successMessage && <p className="success-message">{successMessage}</p>}
@@ -131,7 +163,12 @@ const MovieForm: React.FC<MovieFormProps> = ({ onMovieAdded }) => {
           />
         </div>
 
-        <button type="submit">Add Movie</button>
+        <button type="submit">{initialMovie ? 'Update Movie' : 'Add Movie'}</button>
+        {initialMovie && onCancelEdit && (
+          <button type="button" onClick={onCancelEdit} className="cancel-button">
+            Cancel
+          </button>
+        )}
       </form>
     </div>
   );
