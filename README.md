@@ -30,6 +30,7 @@ docker-compose up -d
 ## Microservices
 
 *   **Movie Service:** Manages movie data and provides REST APIs. See its [README.md](movie-service/README.md) for details.
+*   **Showscape UI (Frontend):** The React-based user interface. See its [README.md](showscapeui/README.md) for details.
 
 ---
 *This README is a living document and will be updated as the project evolves.*

@@ -1,69 +1,58 @@
-# React + TypeScript + Vite
+# Showscape UI (Frontend)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the React frontend application for the Showscape project, providing a user interface to interact with the backend microservices.
 
-Currently, two official plugins are available:
+## Technology Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+*   **Framework:** React 18
+*   **Build Tool:** Vite
+*   **Language:** TypeScript
+*   **Routing:** React Router DOM
+*   **Styling:** Pure CSS
 
-## Expanding the ESLint configuration
+## Implemented Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+*   **Movie Listing:** Displays all movies fetched from the `movie-service` backend.
+*   **Add New Movie:** A form to create new movie entries, with client-side validation and backend error handling.
+*   **Edit Movie:** Functionality to edit existing movie details, pre-populating the form with current data.
+*   **Delete Movie:** Ability to delete movies with a confirmation step.
+*   **Search/Filter:** Filters movies by genre and release year using debounced inputs to optimize API calls.
+*   **Client-Side Routing:** Uses React Router for navigation between different views (Home, Add Movie, Edit Movie).
+*   **Improved UI/UX:** Enhanced form layout, consistent container widths, and basic styling for a better user experience.
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Getting Started
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+To run the Showscape UI locally:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Prerequisites
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+*   Node.js (LTS version recommended)
+*   npm (Node Package Manager)
+*   Ensure the `movie-service` backend is running (refer to `movie-service/README.md`).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Running the Application
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1.  Navigate to the `showscapeui` directory:
+    ```bash
+    cd showscapeui
+    ```
+2.  Install dependencies (if you haven't already):
+    ```bash
+    npm install
+    ```
+3.  Start the development server:
+    ```bash
+    npm run dev
+    ```
+
+The application will typically be available at `http://localhost:5173` (check your terminal for the exact URL).
+
+## Project Structure
+
+*   `src/App.tsx`: Main application component, handles routing and overall layout.
+*   `src/Movie.ts`: TypeScript interface for the Movie data structure.
+*   `src/components/`: Reusable UI components (e.g., `MovieForm.tsx`, `Header.tsx`).
+*   `src/dto/`: TypeScript interfaces for Data Transfer Objects (e.g., `MovieRequest.ts`).
+*   `src/hooks/`: Custom React hooks (e.g., `useDebounce.ts`).
+*   `src/pages/`: Page-level components for different routes (e.g., `MovieListPage.tsx`, `AddMoviePage.tsx`, `EditMoviePage.tsx`).
+*   `src/index.css`: Global styles for the application.
